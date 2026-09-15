@@ -31,10 +31,10 @@ Nesta aplicação, **Alice e Bob possuem seu próprio par de chaves**.
 
 A geração segue os quatro passos apresentados no material da atividade:
 
-- Escolha de `p` e `q`: São escolhidos dois números primos grandes. Nesta implementação, são utilizados primos de **2048 bits**, resultando em um módulo RSA de 4096 bits.
-- Cálculo de `N` e `φ(N)`: O módulo RSA é calculado por $N = p × q$ e a função totiente: $φ(N) = (p - 1) × (q - 1)$
-- Escolha de `e`: É escolhido um valor `e` tal que 1 < e < φ(N) e que seja coprimo com `φ(N)`. A implementação utiliza: $e = 65537$
-- Cálculo de `d` É calculado o inverso multiplicativo de `e` módulo `φ(N)`: $e × d ≡ 1 (mod φ(N))$. Assim são formadas as chaves:
+- _Escolha de `p` e `q`:_ São escolhidos dois números primos grandes. Nesta implementação, são utilizados primos de **2048 bits**, resultando em um módulo RSA de 4096 bits.
+- _Cálculo de `N` e `φ(N)`:_ O módulo RSA é calculado por $N = p × q$ e a função totiente: $φ(N) = (p - 1) × (q - 1)$
+- _Escolha de `e`:_ É escolhido um valor `e` tal que 1 < e < φ(N) e que seja coprimo com `φ(N)`. A implementação utiliza: $e = 65537$
+- _Cálculo de `d`:_ É calculado o inverso multiplicativo de `e` módulo `φ(N)`: $e × d ≡ 1 (mod φ(N))$. Assim são formadas as chaves:
   - Chave pública  = $(e, N)$
   - Chave privada  = $(d, N)$
 
@@ -327,5 +327,3 @@ python client.py
 * mensagem criptografada;
 * resposta criptografada;
 * encerramento da conexão.
-
-A implementação segue esse fluxo e o integra à comunicação TCP, permitindo observar tanto o funcionamento matemático do RSA quanto sua utilização prática na troca de mensagens entre Alice e Bob.
