@@ -78,7 +78,7 @@ As chaves públicas são enviadas **em texto puro**, pois não existe necessidad
 Alice digita a mensagem diretamente no terminal:
 
 ```text
-Alice: Hello Bob!
+Alice: The information security is of significant importance to ensure the privacy of communications.
 ```
 
 A aplicação transforma a mensagem em um número e realiza a criptografia utilizando a chave pública de Bob.
@@ -120,13 +120,13 @@ Bob então consegue recuperar a mensagem enviada por Alice.
 Assim como no código TCP original da atividade, Bob transforma a mensagem para letras maiúsculas:
 
 ```text
-Hello Bob!
+The information security is of significant importance to ensure the privacy of communications.
 ```
 
 torna-se:
 
 ```text
-HELLO BOB!
+THE INFORMATION SECURITY IS OF SIGNIFICANT IMPORTANCE TO ENSURE THE PRIVACY OF COMMUNICATIONS.
 ```
 
 ---
@@ -170,7 +170,7 @@ Resposta original
 O resultado é apresentado no terminal:
 
 ```text
-Bob: HELLO BOB!
+Bob: THE INFORMATION SECURITY IS OF SIGNIFICANT IMPORTANCE TO ENSURE THE PRIVACY OF COMMUNICATIONS.
 ```
 
 ---
