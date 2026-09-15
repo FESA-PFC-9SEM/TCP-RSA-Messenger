@@ -31,63 +31,12 @@ Nesta aplicação, **Alice e Bob possuem seu próprio par de chaves**.
 
 A geração segue os quatro passos apresentados no material da atividade:
 
-### 1. Escolha de `p` e `q`
-
-São escolhidos dois números primos grandes:
-
-```text
-p
-q
-```
-
-Nesta implementação, são utilizados primos de **2048 bits**, resultando em um módulo RSA de 4096 bits.
-
-### 2. Cálculo de `N` e `φ(N)`
-
-O módulo RSA é calculado por:
-
-```text
-N = p × q
-```
-
-E a função totiente:
-
-```text
-φ(N) = (p - 1) × (q - 1)
-```
-
-### 3. Escolha de `e`
-
-É escolhido um valor `e` tal que:
-
-```text
-1 < e < φ(N)
-```
-
-e que seja coprimo com `φ(N)`.
-
-A implementação utiliza:
-
-```text
-e = 65537
-```
-
-### 4. Cálculo de `d`
-
-É calculado o inverso multiplicativo de `e` módulo `φ(N)`:
-
-```text
-e × d ≡ 1 (mod φ(N))
-```
-
-Assim são formadas as chaves:
-
-```text
-Chave pública  = (e, N)
-Chave privada  = (d, N)
-```
-
-Esses são os quatro passos apresentados no material da atividade.
+- Escolha de `p` e `q`: São escolhidos dois números primos grandes. Nesta implementação, são utilizados primos de **2048 bits**, resultando em um módulo RSA de 4096 bits.
+- Cálculo de `N` e `φ(N)`: O módulo RSA é calculado por $N = p × q$ e a função totiente: $φ(N) = (p - 1) × (q - 1)$
+- Escolha de `e`: É escolhido um valor `e` tal que 1 < e < φ(N) e que seja coprimo com `φ(N)`. A implementação utiliza: $e = 65537$
+- Cálculo de `d` É calculado o inverso multiplicativo de `e` módulo `φ(N)`: $e × d ≡ 1 (mod φ(N))$. Assim são formadas as chaves:
+  - Chave pública  = $(e, N)$
+  - Chave privada  = $(d, N)$
 
 ---
 
@@ -95,32 +44,20 @@ Esses são os quatro passos apresentados no material da atividade.
 
 Quando uma mensagem precisa ser enviada para Bob, Alice utiliza a **chave pública de Bob**.
 
-A operação de criptografia é:
-
-```text
-C = P^e mod N
-```
-
-Onde:
+A operação de criptografia é: $C = P^e mod N$, onde:
 
 * `P` = mensagem original representada numericamente;
 * `e` = expoente da chave pública;
 * `N` = módulo RSA;
 * `C` = mensagem cifrada.
 
-Bob utiliza sua **chave privada** para recuperar a mensagem:
+Bob utiliza sua **chave privada** para recuperar a mensagem: $P = C^d mod N$
 
-```text
-P = C^d mod N
-```
-
-Esse é o princípio fundamental demonstrado na atividade: **uma mensagem criptografada com a chave pública do destinatário pode ser recuperada utilizando a chave privada correspondente**.
+**Uma mensagem criptografada com a chave pública do destinatário pode ser recuperada utilizando a chave privada correspondente**.
 
 ---
 
 # 🔄 Fluxo da aplicação
-
-A comunicação acontece entre duas máquinas, representadas por **Alice** e **Bob**.
 
 ```text
         ALICE                                  BOB
@@ -161,64 +98,21 @@ A comunicação acontece entre duas máquinas, representadas por **Alice** e **B
 
 ## 🧩 Etapas da comunicação
 
-### 1. Alice gera suas chaves
+### 1. Alice e Bob geram suas chaves
 
-Alice gera:
+Alice gera a sua chave pública e a privada, em que a privada permanece somente com ela, e Bob também gera suas chaves e a privada permanece somente com ele.
 
-```text
-Chave pública de Alice
-Chave privada de Alice
-```
+### 2. Estabelecimento da conexão TCP
 
-A chave privada permanece somente com Alice.
+Alice conecta-se ao servidor de Bob utilizando TCP e a porta 1300.
 
----
+### 3. Troca das chaves públicas
 
-### 2. Bob gera suas chaves
-
-Bob também gera:
-
-```text
-Chave pública de Bob
-Chave privada de Bob
-```
-
-Sua chave privada permanece somente com Bob.
-
----
-
-### 3. Estabelecimento da conexão TCP
-
-Alice conecta-se ao servidor de Bob utilizando:
-
-```text
-TCP
-Porta: 1300
-```
-
----
-
-### 4. Troca das chaves públicas
-
-Alice envia sua chave pública para Bob.
-
-```text
-Alice ──────── Chave pública ────────> Bob
-```
-
-Bob então envia sua chave pública para Alice.
-
-```text
-Alice <─────── Chave pública ──────── Bob
-```
+Alice envia sua chave pública para Bob e vice-versa.
 
 As chaves públicas são enviadas **em texto puro**, pois não existe necessidade de mantê-las secretas.
 
-As chaves privadas nunca são transmitidas pela rede.
-
----
-
-### 5. Alice envia uma mensagem
+### 4. Alice envia uma mensagem
 
 Alice digita a mensagem diretamente no terminal:
 
@@ -238,21 +132,11 @@ RSA
 Ciphertext
 ```
 
----
+### 5. Alice envia o ciphertext
 
-### 6. Alice envia o ciphertext
+O resultado da criptografia é enviado através da conexão TCP. Quem observar a comunicação de rede não verá diretamente a mensagem original nesse campo, mas sim o valor cifrado.
 
-O resultado da criptografia é enviado através da conexão TCP:
-
-```text
-Alice ─────── Ciphertext ───────> Bob
-```
-
-Quem observar a comunicação de rede não verá diretamente a mensagem original nesse campo, mas sim o valor cifrado.
-
----
-
-### 7. Bob descriptografa
+### 6. Bob descriptografa
 
 Bob recebe o ciphertext e utiliza sua **chave privada**:
 
@@ -270,7 +154,7 @@ Bob então consegue recuperar a mensagem enviada por Alice.
 
 ---
 
-### 8. Bob processa a mensagem
+### 7. Bob processa a mensagem
 
 Assim como no código TCP original da atividade, Bob transforma a mensagem para letras maiúsculas:
 
@@ -286,7 +170,7 @@ HELLO BOB!
 
 ---
 
-### 9. Bob responde
+### 8. Bob responde
 
 Bob utiliza a **chave pública de Alice** para criptografar a resposta:
 
@@ -308,7 +192,7 @@ Alice <────── Ciphertext ────── Bob
 
 ---
 
-### 10. Alice descriptografa
+### 9. Alice descriptografa
 
 Alice utiliza sua chave privada para recuperar a resposta:
 
@@ -332,11 +216,7 @@ Bob: HELLO BOB!
 
 # 🖥️ Interface da demonstração
 
-A aplicação foi organizada como uma sequência interativa de passos.
-
-Cada máquina controla suas próprias ações utilizando **Enter**, permitindo que o procedimento seja apresentado com calma durante a gravação.
-
-Exemplo:
+A aplicação foi organizada como uma sequência interativa de passos. Cada máquina controla suas próprias ações utilizando **Enter**, permitindo que o procedimento seja apresentado em um formato de passo a passo didático.
 
 ```text
 [ALICE] PASSO 4 — Envio da chave pública
@@ -400,14 +280,6 @@ Responsável por:
 * criptografar a resposta;
 * enviar a resposta cifrada.
 
-### `roteiro_demonstracao.md`
-
-Contém o roteiro utilizado para executar e apresentar a atividade, incluindo a sequência recomendada de execução e observação no Wireshark.
-
-### `README.md`
-
-Documento atual com a explicação do RSA, funcionamento da aplicação e instruções de execução.
-
 ---
 
 # ▶️ Execução
@@ -422,12 +294,6 @@ No Windows:
 ipconfig
 ```
 
-No Linux:
-
-```bash
-ip addr
-```
-
 Identifique o endereço IPv4 da interface de rede utilizada.
 
 ### 2. Execute o servidor
@@ -437,14 +303,6 @@ python server.py
 ```
 
 O servidor ficará aguardando a conexão de Alice.
-
-### 3. Firewall
-
-Se necessário, permita conexões TCP na porta:
-
-```text
-1300
-```
 
 ---
 
@@ -508,58 +366,5 @@ python client.py
 * mensagem criptografada;
 * resposta criptografada;
 * encerramento da conexão.
-
-As chaves públicas podem ser observadas em texto puro porque são informações que podem ser compartilhadas.
-
-Já as mensagens transmitidas após a criptografia aparecem como **ciphertexts**.
-
-Para acompanhar a comunicação completa, selecione um pacote TCP e utilize:
-
-**Follow → TCP Stream**
-
----
-
-# 📊 RTT
-
-O cliente mede o tempo total da atividade utilizando:
-
-```python
-time.perf_counter()
-```
-
-O cronômetro começa no início da execução do cliente e termina quando a resposta final é apresentada.
-
-O resultado é exibido em segundos e milissegundos:
-
-```text
-RTT conforme a atividade: 0.123456 segundos
-RTT: 123.456 ms
-```
-
-O valor pode variar de acordo com:
-
-* desempenho das máquinas;
-* tempo necessário para gerar as chaves RSA;
-* processamento da criptografia;
-* velocidade da rede;
-* latência da conexão.
-
----
-
-# ⚠️ Observação importante
-
-Esta implementação é **didática**, desenvolvida para demonstrar o fluxo solicitado na atividade.
-
-A criptografia utiliza RSA diretamente sobre os blocos, sem mecanismos de padding como **OAEP** ou **PKCS#1**.
-
-Portanto, esta implementação **não deve ser utilizada como uma implementação de segurança real**.
-
-Em aplicações reais, devem ser utilizados esquemas de criptografia padronizados e bibliotecas criptográficas apropriadas.
-
----
-
-# 📚 Relação com o material
-
-O material da atividade apresenta a geração das chaves RSA através da escolha de `p` e `q`, cálculo de `N` e `φ(N)`, escolha de `e` coprimo com `φ(N)` e cálculo de `d` como inverso multiplicativo de `e`. Também apresenta a utilização da chave pública para criptografia e da chave privada para descriptografia.
 
 A implementação segue esse fluxo e o integra à comunicação TCP, permitindo observar tanto o funcionamento matemático do RSA quanto sua utilização prática na troca de mensagens entre Alice e Bob.
