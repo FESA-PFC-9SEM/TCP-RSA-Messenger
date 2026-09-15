@@ -57,45 +57,6 @@ Bob utiliza sua **chave privada** para recuperar a mensagem: $P = C^d mod N$
 
 ---
 
-# 🔄 Fluxo da aplicação
-
-```text
-        ALICE                                  BOB
-       Cliente                                Servidor
-          │                                      │
-          │────── Conexão TCP ─────────────────>│
-          │                                      │
-          │──── Chave pública de Alice ─────────>│
-          │                                      │
-          │<──── Chave pública de Bob ──────────│
-          │                                      │
-          │                                      │
-          │  Mensagem original                  │
-          │       ↓                              │
-          │  Criptografa com                    │
-          │  chave pública de Bob               │
-          │       ↓                              │
-          │────── Ciphertext ──────────────────>│
-          │                                      │
-          │                              Descriptografa
-          │                              com chave privada
-          │                                      │
-          │                              Converte para
-          │                              MAIÚSCULAS
-          │                                      │
-          │                              Criptografa com
-          │                              chave pública
-          │                              de Alice
-          │                                      │
-          │<────── Ciphertext da resposta ──────│
-          │                                      │
-          │  Descriptografa com                 │
-          │  chave privada de Alice             │
-          │       ↓                              │
-          │  Resposta final                     │
-          │                                      │
-```
-
 ## 🧩 Etapas da comunicação
 
 ### 1. Alice e Bob geram suas chaves
